@@ -6,8 +6,8 @@
 
 
 extern "C" {
-    #include "relic/include/relic_bn.h"
-    #include "relic/include/relic_ep.h"
+    #include "relic_bn.h"
+    #include "relic_ep.h"
 }
 #ifdef MONTY
 #undef MONTY
