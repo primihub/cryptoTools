@@ -91,6 +91,7 @@
         "variant": "cpp",
         "vector": "cpp",
         "*.ipp": "cpp",
-        "__functional_03": "cpp"
+        "__functional_03": "cpp",
+        "gsl_assert": "cpp"
     }
 }
