@@ -83,7 +83,7 @@ cc_library(
         ),
     
     includes = [":cryptoTools_config_h"],
-    copts = ["-I. -I@tookit_relic//:relic/include -O0 -g -ggdb -rdynamic -maes -msse2 -msse3 -msse4.1 -mpclmul -DENABLE_CIRCUITS=ON -DENABLE_RELIC=ON -DENABLE_BOOST=ON -DENABLE_SSE=ON -DRAND=HASHD -DMULTI=PTHREAD -DBoost_USE_MULTITHREADED=ON"],
+    copts = ["-I./cryptoTools -I@tookit_relic//:relic/include -O0 -g -ggdb -rdynamic -maes -msse2 -msse3 -msse4.1 -mpclmul -DENABLE_CIRCUITS=ON -DENABLE_RELIC=ON -DENABLE_BOOST=ON -DENABLE_SSE=ON -DRAND=HASHD -DMULTI=PTHREAD -DBoost_USE_MULTITHREADED=ON"],
     linkopts = ["-pthread"],
     linkstatic = True,
     deps = [
