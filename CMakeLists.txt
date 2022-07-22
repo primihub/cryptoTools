@@ -1,9 +1,9 @@
-cmake_minimum_required (VERSION 2.8)
+cmake_minimum_required (VERSION 3.18)
 if (POLICY CMP0048)
   cmake_policy(SET CMP0048 NEW)
 endif (POLICY CMP0048)
 
-project(cryptoTools VERSION 1.7.0)
+project(cryptoTools VERSION 1.9.0)
 
 
 
@@ -26,7 +26,13 @@ if("${CMAKE_CURRENT_SOURCE_DIR}" STREQUAL "${CMAKE_SOURCE_DIR}")
 	endif()
 
 	if(MSVC)
-
+		# optionally add the following to CMAKE_PREFIX_PATH
+		if(NOT DEFINED CMAKE_PREFIX_PATH AND NOT DEFINED NO_OC_DEFAULT_PREFIX)
+			set(CMAKE_PREFIX_PATH 
+				"c:/libs"
+				"${CMAKE_CURRENT_SOURCE_DIR}/.."
+				)
+		endif()
 	else()
 		# Select flags.
 		set(CMAKE_C_FLAGS "-Wall -Wfatal-errors")
@@ -39,124 +45,85 @@ if("${CMAKE_CURRENT_SOURCE_DIR}" STREQUAL "${CMAKE_SOURCE_DIR}")
 endif() 
 
 
+macro(EVAL var)
+     if(${ARGN})
+         set(${var} ON)
+     else()
+         set(${var} OFF)
+     endif()
+endmacro()
 
 
 #############################################
 #                  CONFIGURE                #
 #############################################
-find_program(NASM nasm)
-
+option(ENABLE_SPAN_LITE "use the span-lite library" ON)
 option(ENABLE_RELIC     "use the relic library" OFF)
+option(ENABLE_SODIUM    "use libsodium" OFF)
 option(ENABLE_CIRCUITS  "compile the circuit module" OFF)
-option(ENABLE_CPP_14    "compile with the c++14" ON)
 option(ENABLE_NET_LOG   "compile with network logging" OFF)
 option(ENABLE_WOLFSSL   "conpiler with WolfSSL enabled" OFF)
 option(ENABLE_SSE       "compile with SSE instrctions" ON)
 option(ENABLE_BOOST     "compile with BOOST networing integration" ON)
 
-set(ENABLE_FULL_GSL ${ENABLE_CPP_14})
 
+option(FETCH_AUTO      "automaticly download and build dependancies" OFF)
+
+#option(FETCH_SPAN_LITE		"download and build span" OFF))
+EVAL(FETCH_SPAN_LITE_IMPL 
+	(DEFINED FETCH_SPAN_LITE AND FETCH_SPAN_LITE) OR
+	((NOT DEFINED FETCH_SPAN_LITE) AND (FETCH_AUTO AND ENABLE_SPAN_LITE)))
+
+#option(FETCH_RELIC		"download and build Relic" OFF))
+EVAL(FETCH_RELIC_IMPL 
+	(DEFINED FETCH_RELIC AND FETCH_RELIC) OR
+	((NOT DEFINED FETCH_RELIC) AND (FETCH_AUTO AND ENABLE_RELIC)))
+
+#option(FETCH_SODIUM	"download and build Sodium" OFF))
+EVAL(FETCH_SODIUM_IMPL 
+	(DEFINED FETCH_SODIUM AND FETCH_SODIUM) OR
+	((NOT DEFINED FETCH_SODIUM) AND (FETCH_AUTO AND ENABLE_SODIUM)))
+
+#option(FETCH_SODIUM	"download and build Boost" OFF))
+EVAL(FETCH_BOOST_IMPL 
+	(DEFINED FETCH_BOOST AND FETCH_BOOST) OR
+	((NOT DEFINED FETCH_BOOST) AND (FETCH_AUTO AND ENABLE_BOOST)))
 
 message(STATUS "cryptoTools options\n=======================================================")
 
-message(STATUS "Option: CMAKE_BUILD_TYPE = ${CMAKE_BUILD_TYPE}\n\tRelease\n\tDebug\n\tRelWithDebInfo")
+message(STATUS "Option: FETCH_AUTO        = ${FETCH_AUTO}")
+message(STATUS "Option: VERBOSE_FETCH     = ${VERBOSE_FETCH}\n")
+
+message(STATUS "Option: FETCH_SPAN_LITE   = ${FETCH_SPAN_LITE}")
+message(STATUS "Option: FETCH_RELIC       = ${FETCH_RELIC}")
+message(STATUS "Option: FETCH_SODIUM      = ${FETCH_SODIUM}")
+message(STATUS "Option: FETCH_BOOST       = ${FETCH_BOOST}\n")
+
+message(STATUS "Option: CMAKE_BUILD_TYPE  = ${CMAKE_BUILD_TYPE}\n\tRelease\n\tDebug\n\tRelWithDebInfo")
+message(STATUS "Option: ENABLE_SPAN_LITE  = ${ENABLE_SPAN_LITE}")
 message(STATUS "Option: ENABLE_RELIC      = ${ENABLE_RELIC}")
+message(STATUS "Option: ENABLE_SODIUM     = ${ENABLE_SODIUM}")
+message(STATUS "Option: ENABLE_BOOST      = ${ENABLE_BOOST}\n")
+
 message(STATUS "Option: ENABLE_CIRCUITS   = ${ENABLE_CIRCUITS}")
 message(STATUS "Option: ENABLE_NET_LOG    = ${ENABLE_NET_LOG}")
 message(STATUS "Option: ENABLE_WOLFSSL    = ${ENABLE_WOLFSSL}")
-message(STATUS "Option: ENABLE_SSE        = ${ENABLE_SSE}")
-message(STATUS "Option: ENABLE_BOOST      = ${ENABLE_BOOST}\n\n")
-
-if(NOT ENABLE_CPP_14)
-	set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS}  -Wno-narrowing")
-endif()
+message(STATUS "Option: ENABLE_SSE        = ${ENABLE_SSE}\n\n")
 
 
-configure_file(cryptoTools/Common/config.h.in "cryptoTools/Common/config.h" )
 
 #############################################
 #       cryptoTools, tests, frontend        #
 #############################################
+
+include("${CMAKE_CURRENT_LIST_DIR}/cmake/cryptoToolsDepHelper.cmake")
 
 
 add_subdirectory(cryptoTools)
 add_subdirectory(tests_cryptoTools)
 add_subdirectory(frontend_cryptoTools)
 
-#install(FILES cryptotools-config.cmake DESTINATION cmake/)
+configure_file(cryptoTools/Common/config.h.in "cryptoTools/Common/config.h" )
 
 
-
-#
-#set(CMAKE_INCLUDE_CURRENT_DIR ON)
-#set(CMAKE_INCLUDE_CURRENT_DIR_IN_INTERFACE ON)
-#include(GenerateExportHeader)
-#
-#generate_export_header(cryptoTools)
-#
-#set_property(TARGET cryptoTools PROPERTY VERSION ${cryptoTools_VERSION})
-#set_property(TARGET cryptoTools PROPERTY
-#  INTERFACE_cryptoTools_MAJOR_VERSION 3)
-#set_property(TARGET cryptoTools APPEND PROPERTY
-#  COMPATIBLE_INTERFACE_STRING cryptoTools_MAJOR_VERSION
-#)
-#message(STATUS "---------------------- here 0")
-#
-#
-#install(TARGETS cryptoTools EXPORT cryptoToolsTargets
-#  LIBRARY DESTINATION lib
-#  ARCHIVE DESTINATION lib
-#  RUNTIME DESTINATION bin
-#  INCLUDES DESTINATION include
-#)
-#message(STATUS "------------------- here 1")
-#
-#include(CMakePackageConfigHelpers)
-#write_basic_package_version_file(
-#  "${CMAKE_CURRENT_BINARY_DIR}/cryptoTools/cryptoToolsConfigVersion.cmake"
-#  VERSION ${cryptoTools_VERSION}
-#  COMPATIBILITY AnyNewerVersion
-#)
-#
-#message(STATUS "------------------- here 2")
-#
-#export(EXPORT cryptoToolsTargets
-#  FILE "${CMAKE_CURRENT_BINARY_DIR}/cryptoTools/cryptoToolsTargets.cmake"
-#  NAMESPACE cryptoTools::
-#)
-#
-#
-#message(STATUS "------------------- here 3")
-#
-#configure_file(cmake/cryptoToolsConfig.cmake
-#  "${CMAKE_CURRENT_BINARY_DIR}/cryptoTools/cryptoToolsConfig.cmake"
-#  COPYONLY
-#)
-#
-#
-#message(STATUS "------------------- here 4")
-#set(ConfigPackageLocation lib/cmake/cryptoTools)
-#install(EXPORT cryptoToolsTargets
-#  FILE
-#    cryptoToolsTargets.cmake
-#  NAMESPACE
-#    cryptoTools::
-#  DESTINATION
-#    ${ConfigPackageLocation}
-#)
-#
-#
-#message(STATUS "------------------- here 5")
-#
-#install(
-#  FILES
-#    cmake/cryptoToolsConfig.cmake
-#    "${CMAKE_CURRENT_BINARY_DIR}/cryptoTools/cryptoToolsConfigVersion.cmake"
-#  DESTINATION
-#    ${ConfigPackageLocation}
-#  COMPONENT
-#    Devel
-#)
-#
-#
-#message(STATUS "------------------- here 6")
+include("cmake/install.cmake")

@@ -7,6 +7,9 @@
 #include <numeric>
 #include "cryptoTools/Common/BitVector.h"
 #include <cryptoTools/Crypto/RandomOracle.h>
+#include <string>
+#include <algorithm>
+#include <list>
 
 #ifdef USE_JSON
 #include <nlohmann/json.hpp>
@@ -262,14 +265,14 @@ namespace osuCrypto
             ++i;
             mWireFlags[*d] = mWireFlags[*s];
 
-            u64 rem = (dd - d);
+            //u64 rem = (dd - d);
             u64 len = 1;
-            while (len < rem && *i == *(i - 1) + 1)
-            {
-                ++i;
-                mWireFlags[*(d + len)] = mWireFlags[*(s + len)];
-                ++len;
-            }
+            //while (len < rem && *i == *(i - 1) + 1)
+            //{
+            //    ++i;
+            //    mWireFlags[*(d + len)] = mWireFlags[*(s + len)];
+            //    ++len;
+            //}
 
             mGates.emplace_back(*s, u32(len), GateType::a, *d);
             d += len;
@@ -337,8 +340,13 @@ namespace osuCrypto
         for (u64 i = 0; i < static_cast<u64>(input.size()); ++i)
         {
             if (input[i].size() != mInputs[i].mWires.size())
-                throw std::runtime_error(LOCATION);
+            {
+                std::cout << "BetaCircuit::evaluate error. Bad input size at input " << i
+                    << ". Expecting " << mInputs.size() << " bits but evaluate called with "
+                    << input[i].size() << " bits." << std::endl;
 
+                throw std::runtime_error(LOCATION);
+            }
             for (u64 j = 0; j < input[i].size(); ++j)
             {
                 mem[mInputs[i].mWires[j]] = input[i][j];
@@ -585,6 +593,14 @@ namespace osuCrypto
 
     void BetaCircuit::levelByAndDepth()
     {
+        if (mNonlinearGateCount == 0)
+        {
+            mLevelAndCounts.resize(1);
+            mLevelCounts.resize(1);
+            mLevelCounts[0] = mGates.size();
+            return;
+        }
+
         static const i64 freed(-3), uninit(-2)/*, inputWire(-1)*/;
         struct Node
         {
@@ -633,17 +649,21 @@ namespace osuCrypto
             curNode.mGate = mGates[i - numInputs];
             curNode.mIdx = i;
             curNode.mDepth = 0;
+            if (curNode.mGate.mInput[0] == curNode.mGate.mInput[1] && curNode.mGate.mType != GateType::a)
+                throw std::runtime_error("Gate has the same input for both inputs. Not allowed. " LOCATION);
 
             for (u64 in = 0; in < 2; ++in)
             {
+                // the node that produced our input
                 auto& inNode = *wireOwner[curNode.mGate.mInput[in]];
                 curNode.mInput[in] = &inNode;
 
-                for (auto& oo : inNode.mOutputs)
-                {
-                    if (oo->mIdx == curNode.mIdx)
-                        throw std::runtime_error(LOCATION);
-                }
+                //// check that we haven't already included
+                //for (auto& oo : inNode.mOutputs)
+                //{
+                //    if (oo->mIdx == curNode.mIdx)
+                //        throw std::runtime_error(LOCATION);
+                //}
 
                 inNode.mOutputs.emplace_back(&curNode);
 
@@ -697,12 +717,14 @@ namespace osuCrypto
 
             auto iter = std::find(depList.begin(), depList.end(), &node);
 
-            if (iter == depList.end() || std::find(iter + 1, depList.end(), &node) != depList.end())
-                throw std::runtime_error(LOCATION);
+            if (iter == depList.end() || 
+                (   node.mGate.mType != GateType::a && 
+                    std::find(iter + 1, depList.end(), &node) != depList.end()))
+                throw std::runtime_error("input value appears more than once... " LOCATION);
 
             auto wire = node.mInput[i]->mWire;
             if (wire < 0)
-                throw std::runtime_error(LOCATION);
+                throw std::runtime_error("wire is uninit... " LOCATION);
 
 
             if (depList.size() == 1 && node.mInput[i]->mFixedWireValue == false)
