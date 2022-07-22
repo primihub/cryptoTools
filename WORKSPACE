@@ -59,7 +59,6 @@ versions.check(minimum_bazel_version = "5.0.0")
 # fmt bazle, ref: https://fossies.org/linux/fmt/support/bazel/README.md
 load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
 
-
 new_git_repository(
     name = "toolkit_relic",
     build_file = "//bazel:BUILD.relic",

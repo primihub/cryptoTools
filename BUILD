@@ -35,12 +35,11 @@ genrule(
         echo "#pragma once \r\n \
 #define ENABLE_RELIC ON \r\n \
 #define ENABLE_CIRCUITS ON \r\n \
-#define ENABLE_FULL_GSL ON \r\n \
+#define ENABLE_SPAN_LITE ON \r\n \
 #define ENABLE_CPP_14 ON \r\n \
 #define ENABLE_BOOST ON \r\n \
 #define ENABLE_SSE ON \r\n \
 #define ENABLE_CPP_14 ON \r\n \
-#define ENABLE_FULL_GSL ON \r\n \
 #define ENABLE_NET_LOG ON \r\n \
 #define ENABLE_NASM ON \r\n \
 #if (defined(_MSC_VER) || defined(__SSE2__)) && defined(ENABLE_SSE) \r\n \
@@ -76,22 +75,13 @@ cc_library(
     hdrs = [":cryptoTools_config_h"] + glob(
                 ["cryptoTools/Circuit/*.h",
                 "cryptoTools/Common/*.h",
+                "cryptoTools/Common/*.hpp",
                 "cryptoTools/Crypto/*.h",
                 "cryptoTools/Crypto/blake2/c/*.h",
                 "cryptoTools/Crypto/blake2/sse/*.h",
                 "cryptoTools/Network/*.h"],
         ),
-    textual_hdrs = [
-                    "cryptoTools/gsl/span",
-                    "cryptoTools/gsl/gsl_assert",
-                    "cryptoTools/gsl/gsl_util",
-                    "cryptoTools/gsl/gsl_byte",
-                    "cryptoTools/gsl/gsl_algorithm",
-                    "cryptoTools/gsl/gsl",
-                    "cryptoTools/gsl/multi_span",
-                    "cryptoTools/gsl/string_span",
-                    "cryptoTools/gsl/gls-lite.hpp",
-                ],
+    
     includes = [":cryptoTools_config_h"],
     copts = ["-I. -I@tookit_relic//:relic/include -O0 -g -ggdb -rdynamic -maes -msse2 -msse3 -msse4.1 -mpclmul -DENABLE_CIRCUITS=ON -DENABLE_RELIC=ON -DENABLE_BOOST=ON -DENABLE_SSE=ON -DRAND=HASHD -DMULTI=PTHREAD -DBoost_USE_MULTITHREADED=ON"],
     linkopts = ["-pthread"],
@@ -133,7 +123,7 @@ cc_library(
     hdrs = glob([
                     "frontend_cryptoTools/**/*.h"
                 ],),
-    copts = [" -O0 -g -ggdb -rdynamic -maes -msse2 -msse3 -msse4.1 -mpclmul -DENABLE_CIRCUITS=ON -DENABLE_RELIC=ON -DENABLE_BOOST=ON -DENABLE_SSE=ON -DBoost_USE_MULTITHREADED=ON -DENABLE_FULL_GSL=ON -DENABLE_CPP_14=ON"],
+    copts = [" -O0 -g -ggdb -rdynamic -maes -msse2 -msse3 -msse4.1 -mpclmul -DENABLE_CIRCUITS=ON -DENABLE_RELIC=ON -DENABLE_BOOST=ON -DENABLE_SSE=ON -DBoost_USE_MULTITHREADED=ON -DENABLE_SPAN_LITE=ON -DENABLE_CPP_14=ON"],
     linkopts = ["-pthread -lstdc++"],
     linkstatic = True,
     deps = [
