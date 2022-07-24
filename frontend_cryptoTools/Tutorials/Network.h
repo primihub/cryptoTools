@@ -1,5 +1,5 @@
 #pragma once
-#include <cryptoTools/Common/config.h>
+#include "cryptoTools/Common/config.h"
 #ifdef ENABLE_BOOST
 
 #include <sstream>

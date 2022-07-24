@@ -7,7 +7,7 @@
 #include "block.h"
 
 #ifdef ENABLE_SPAN_LITE
-#include <nonstd/span.hpp>
+#include "span.hpp"
 #else
 #include <span>
 #endif

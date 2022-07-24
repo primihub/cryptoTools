@@ -13,7 +13,7 @@
 
 #include "tests_cryptoTools/WolfSSL_Tests.h"
 
-#include <cryptoTools/Common/config.h>
+#include "cryptoTools/Common/config.h"
 using namespace osuCrypto;
 
 namespace tests_cryptoTools
