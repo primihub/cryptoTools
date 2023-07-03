@@ -4,9 +4,9 @@
 #ifdef ENABLE_RELIC
 
 extern "C" {
-#include "relic_core.h"
-#include "relic_fp.h"
-#include "relic_util.h"
+#include "relic/relic_core.h"
+#include "relic/relic_fp.h"
+#include "relic/relic_util.h"
 }
 
 #if !defined(GSL_UNLIKELY)

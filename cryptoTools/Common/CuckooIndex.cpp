@@ -1,7 +1,7 @@
 #include <cryptoTools/Common/CuckooIndex.h>
-#include <cryptoTools/Crypto/RandomOracle.h>
-#include <cryptoTools/Crypto/PRNG.h>
-#include <cryptoTools/Common/Log.h>
+#include "cryptoTools/Crypto/RandomOracle.h"
+#include "cryptoTools/Crypto/PRNG.h"
+#include "cryptoTools/Common/Log.h"
 #include <numeric>
 #include <random>
 #include <algorithm>
@@ -352,7 +352,7 @@ namespace osuCrypto
 
                 // same thing here, this fetch is slow. Do them in parallel.
                 //u64 newVal0 = inputIdxs[0] | (curHashIdxs[0] << 56);
-                //oldVals[i] = 
+                //oldVals[i] =
                 mBins[curAddrs[0]].swap(inputIdxs[0], curHashIdxs[0]);
                 mBins[curAddrs[1]].swap(inputIdxs[1], curHashIdxs[1]);
                 mBins[curAddrs[2]].swap(inputIdxs[2], curHashIdxs[2]);
@@ -459,7 +459,7 @@ namespace osuCrypto
                             std::cout << "cuckoo stash overflow" << std::endl;
                             throw RTE_LOC;
                         }
-                    }                     
+                    }
                     while (mStash[k].isEmpty() == false);
                     mStash[k].swap(inputIdx, curHashIdx);
                     return;

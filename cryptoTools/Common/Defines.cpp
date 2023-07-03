@@ -1,11 +1,11 @@
-#include <cryptoTools/Common/Defines.h>
-#include <cryptoTools/Crypto/AES.h>
+#include "cryptoTools/Common/Defines.h"
+#include "cryptoTools/Crypto/AES.h"
 #include <random>
 #include <sstream>
 #include <iomanip>
 #include <cstring>
 
-namespace osuCrypto 
+namespace osuCrypto
 {
 
 
@@ -63,6 +63,6 @@ namespace osuCrypto
 		auto ret = std::array<u32, 4>{rd(), rd(), rd(), rd()};
         block blk;
         memcpy(&blk, &ret, sizeof(block));
-		return blk; 
+		return blk;
     }
 }

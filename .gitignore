@@ -10,7 +10,6 @@
 
 out/*
 CMakeFiles/*
-*Makefile*
 *install_manifest.txt*
 */CMakeFiles/*
 *cmake_install.cmake
@@ -224,5 +223,4 @@ bazel-bin
 bazel-cryptoTools
 bazel-out
 bazel-testlogs
-bazel/
 .vscode/
