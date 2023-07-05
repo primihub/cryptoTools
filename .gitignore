@@ -7,9 +7,8 @@
 *.sln.docstates
 .vs/
 *.args.json
-
+bazel-*
 CMakeFiles/*
-*Makefile*
 *install_manifest.txt*
 */CMakeFiles/*
 *cmake_install.cmake

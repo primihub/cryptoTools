@@ -1,9 +1,9 @@
 #pragma once
-// This file and the associated implementation has been placed in the public domain, waiving all copyright. No restrictions are placed on its use. 
-#include <cryptoTools/Common/Defines.h>
-#include <cryptoTools/Common/BitIterator.h>
-#include <cryptoTools/Crypto/PRNG.h>
-#include <cryptoTools/Network/IoBuffer.h>
+// This file and the associated implementation has been placed in the public domain, waiving all copyright. No restrictions are placed on its use.
+#include "cryptoTools/Common/Defines.h"
+#include "cryptoTools/Common/BitIterator.h"
+#include "cryptoTools/Crypto/PRNG.h"
+#include "cryptoTools/Network/IoBuffer.h"
 
 namespace osuCrypto {
 
@@ -39,7 +39,7 @@ namespace osuCrypto {
         void assign(const block& b);
 
 		// Copy an existing BitVector
-        void assign(const BitVector& K); 
+        void assign(const BitVector& K);
 
 		// Append length bits pointed to by data starting a the bit index by offset.
         void append(u8* data, u64 length, u64 offset = 0);
@@ -84,16 +84,16 @@ namespace osuCrypto {
 		// Get a reference to a specific bit.
         BitReference operator[](const u64 idx) const;
 
-		// Xor two BitVectors together and return the result. Must have the same size. 
+		// Xor two BitVectors together and return the result. Must have the same size.
         BitVector operator^(const BitVector& B)const;
 
-		// AND two BitVectors together and return the result. Must have the same size. 
+		// AND two BitVectors together and return the result. Must have the same size.
         BitVector operator&(const BitVector& B)const;
 
-		// OR two BitVectors together and return the result. Must have the same size. 
+		// OR two BitVectors together and return the result. Must have the same size.
         BitVector operator|(const BitVector& B)const;
 
-		// Invert the bits of the BitVector and return the result. 
+		// Invert the bits of the BitVector and return the result.
         BitVector operator~()const;
 
 		// Xor the rhs into this BitVector
@@ -113,7 +113,7 @@ namespace osuCrypto {
 
 		// Check for equality between two BitVectors
 		bool equals(const BitVector& K) const;
-         
+
 		// Initialize this BitVector from a string of '0' and '1' characters.
         void fromString(std::string data);
 
@@ -136,10 +136,10 @@ namespace osuCrypto {
         inline BitReference back() { return (*this)[size() - 1]; }
 
 		// Set all the bits to random values.
-        void randomize(PRNG& G); 
+        void randomize(PRNG& G);
 
 		// Return the parity of the vector.
-        u8 parity();  
+        u8 parity();
 
 		// Return the hex representation of the vector.
         std::string hex()const;

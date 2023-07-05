@@ -1,8 +1,8 @@
 
-#include <cryptoTools/Crypto/Curve.h>
+#include "cryptoTools/Crypto/Curve.h"
 
 #ifdef ENABLE_MIRACL
-#include <cryptoTools/Common/Log.h>
+#include "cryptoTools/Common/Log.h"
 #include <miracl/include/miracl.h>
 #include <sstream>
 
@@ -579,7 +579,7 @@ namespace osuCrypto
 
 
         // 1.   r = HashToBase(alpha)
-        EccNumber r(*mCurve, prng, EccNumber::FieldPrime); 
+        EccNumber r(*mCurve, prng, EccNumber::FieldPrime);
 
         auto u = 2;
         auto& A = *mCurve->BA;
@@ -688,15 +688,15 @@ namespace osuCrypto
 
         // v2 = sqrt(y)
         sqroot(mCurve->mMiracl,
-            y.mVal, 
+            y.mVal,
             mCurve->getFieldPrime().mVal,
             v2.mVal);
 
         fromNum(v, v2);
-        
+
         //// given the x coordinate (v), use point decompression
         //// to solve for y. First we serialize v and then read it
-        //// into the point. Note that dest[0] = 0 denotes that y 
+        //// into the point. Note that dest[0] = 0 denotes that y
         //// should be positive.
         //std::vector<u8> dest(sizeBytes());
         //dest[0] = 0;
@@ -980,7 +980,7 @@ namespace osuCrypto
         {
 		    if (mCurve->mIsPrimeOrder == false)
 			    throw std::runtime_error("Only implemented when the group order is prime. " LOCATION);
-        
+
             mod = mCurve->mOrder->mVal;
         }
         else
@@ -990,7 +990,7 @@ namespace osuCrypto
             mod = mCurve->mFieldPrime->mVal;
         }
 
-        // ret = ret ^ -1 % mod 
+        // ret = ret ^ -1 % mod
 		xgcd(mCurve->mMiracl, ret.mVal, mod, ret.mVal, ret.mVal, ret.mVal);
 
 		return ret;

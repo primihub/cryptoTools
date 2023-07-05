@@ -1,10 +1,10 @@
 #pragma once
-#include <cryptoTools/Common/Defines.h> 
+#include "cryptoTools/Common/Defines.h"
 #ifdef ENABLE_CIRCUITS
 
 
 #include "Gate.h"
-#include <cryptoTools/Common/BitVector.h>
+#include "cryptoTools/Common/BitVector.h"
 #include <array>
 
 
@@ -105,7 +105,7 @@ namespace osuCrypto
 
             bool operator==(const Print& p) const
             {
-                return 
+                return
                     mGateIdx == p.mGateIdx &&
                     mWire == p.mWire &&
                     mMsg == p.mMsg &&

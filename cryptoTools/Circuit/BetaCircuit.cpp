@@ -6,12 +6,12 @@
 #include <set>
 #include <numeric>
 #include "cryptoTools/Common/BitVector.h"
-#include <cryptoTools/Crypto/RandomOracle.h>
+#include "cryptoTools/Crypto/RandomOracle.h"
 
 #ifdef USE_JSON
 #include <nlohmann/json.hpp>
 using json = nlohmann::json;
-#endif 
+#endif
 
 namespace osuCrypto
 {
@@ -1366,8 +1366,8 @@ namespace osuCrypto
 
 
 
-        // our outputs are the wires right after the inputs while bristol's 
-        // are at the end. This function fixes this by offsetting the wire 
+        // our outputs are the wires right after the inputs while bristol's
+        // are at the end. This function fixes this by offsetting the wire
         // idxs approperatly.
         auto translate = [&](u64 idx) {
 

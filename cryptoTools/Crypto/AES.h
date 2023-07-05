@@ -1,6 +1,6 @@
 #pragma once
 // This file and the associated implementation has been placed in the public domain, waiving all copyright. No restrictions are placed on its use.
-#include <cryptoTools/Common/Defines.h>
+#include "cryptoTools/Common/Defines.h"
 
 namespace osuCrypto {
 
@@ -31,7 +31,7 @@ namespace osuCrypto {
             // Encrypts the plaintext block and stores the result in ciphertext
             void ecbEncBlock(const block& plaintext, block& ciphertext) const;
 
-            // Encrypts the plaintext block and returns the result 
+            // Encrypts the plaintext block and returns the result
             block ecbEncBlock(const block& plaintext) const;
 
             // Encrypts blockLength starting at the plaintexts pointer and writes the result
@@ -198,7 +198,7 @@ namespace osuCrypto {
             // Encrypts 16 blocks pointer to by plaintexts and writes the result to ciphertext
             void ecbEnc16Blocks(const block* plaintexts, block* ciphertext) const;
 
-            // Encrypts the vector of blocks {baseIdx, baseIdx + 1, ..., baseIdx + length - 1} 
+            // Encrypts the vector of blocks {baseIdx, baseIdx + 1, ..., baseIdx + length - 1}
             // and writes the result to ciphertext.
             void ecbEncCounterMode(u64 baseIdx, u64 length, block* ciphertext) const
             {
@@ -409,7 +409,7 @@ namespace osuCrypto {
             }
 #else
             u64 main = 0;
-#endif  
+#endif
 
             for (u64 i = main; i < N; ++i)
             {
@@ -417,7 +417,7 @@ namespace osuCrypto {
             }
         }
 
-        // Computes the encrpytion of N blocks pointed to by plaintext 
+        // Computes the encrpytion of N blocks pointed to by plaintext
         // and stores the result at ciphertext.
         void ecbEncNBlocks(const block* plaintext, block* ciphertext) const
         {
@@ -435,7 +435,7 @@ namespace osuCrypto {
         }
 
 
-        // Computes the hash of N blocks pointed to by plaintext 
+        // Computes the hash of N blocks pointed to by plaintext
         // and stores the result at ciphertext.
         void hashNBlocks(const block* plaintext, block* hashes) const
         {

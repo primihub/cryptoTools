@@ -7,7 +7,7 @@
 #include <memory>
 #include <mutex>
 #include <unordered_map>
-//#include <cryptoTools/Network/IOService.h>
+//#include "cryptoTools/Network/IOService.h"
 
 namespace osuCrypto
 {
@@ -100,7 +100,7 @@ namespace osuCrypto
 
         SpscQueue(u64 cap = 64)
         //    : mQueue(cap)
-        { 
+        {
             mQueues.emplace_back(cap);
         }
 
@@ -116,7 +116,7 @@ namespace osuCrypto
             //mQueue.push_back(std::forward<T>(v));
             if(mQueues.back().full())
                 mQueues.emplace_back(mQueues.back().size() * 4);
-            mQueues.back().push_back(std::forward<T>(v));            
+            mQueues.back().push_back(std::forward<T>(v));
         }
 
         T& front()
@@ -153,8 +153,8 @@ namespace osuCrypto
         {
             virtual ~SBOInterface() {};
 
-            // assumes dest is uninitialized and calls the 
-            // placement new move constructor with this as 
+            // assumes dest is uninitialized and calls the
+            // placement new move constructor with this as
             // dest destination.
             virtual void moveTo(SBO_ptr<T, StorageSize>& dest) = 0;
         };
@@ -279,7 +279,7 @@ namespace osuCrypto
 
             mData = nullptr;
         }
-          
+
         SBOInterface& getSBO()
         {
             return *(SBOInterface*)& mStorage;

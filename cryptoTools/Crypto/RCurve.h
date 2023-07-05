@@ -1,6 +1,6 @@
 #pragma once
 
-#include <cryptoTools/Common/Defines.h>
+#include "cryptoTools/Common/Defines.h"
 
 #ifdef ENABLE_RELIC
 
@@ -12,8 +12,8 @@ extern "C" {
 #ifdef MONTY
 #undef MONTY
 #endif
-#include <cryptoTools/Crypto/PRNG.h>
-#include <cryptoTools/Crypto/RandomOracle.h>
+#include "cryptoTools/Crypto/PRNG.h"
+#include "cryptoTools/Crypto/RandomOracle.h"
 #include "Hashable.h"
 
 #ifndef RLC_FP_BYTES
