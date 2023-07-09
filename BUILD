@@ -156,7 +156,7 @@ cc_library(
     "@boost//:multiprecision",
     "@boost//:system",
     "@boost//:circular_buffer",
-    "@github_com_span_lite//:span_lite",
+    "@github_com_microsoft_gsl//:gsl",
   ] + DEFAILT_LINK_OPT,
 )
 

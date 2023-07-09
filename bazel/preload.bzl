@@ -44,3 +44,11 @@ def cryptoTools_preload(repo_reference = ""):
         "https://github.com/martinmoene/span-lite/archive/refs/tags/v0.10.3.tar.gz",
       ]
     )
+  if "github_com_microsoft_gsl" not in native.existing_rules():
+    http_archive(
+      name = "github_com_microsoft_gsl",
+      strip_prefix = "GSL-4.0.0",
+      urls = [
+        "https://primihub.oss-cn-beijing.aliyuncs.com/tools/gsl_v4.0.0.tar.gz",
+      ]
+    )
