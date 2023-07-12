@@ -1,4 +1,4 @@
-#include <cryptoTools/Common/BitVector.h>
+#include "cryptoTools/Common/BitVector.h"
 #include <sstream>
 #include <cstring>
 #include <iomanip>
@@ -116,7 +116,7 @@ namespace osuCrypto {
 
     void BitVector::resize(u64 newSize, u8 val)
     {
-        
+
         val = bool(val) * ~0;
 
         auto oldSize = size();

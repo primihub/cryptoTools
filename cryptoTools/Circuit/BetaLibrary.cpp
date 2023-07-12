@@ -900,10 +900,10 @@ namespace osuCrypto
 		//  G[i:i] = A[i] & B[i]
 		//
 		// For subtraction, its basically the same but we have:
-		// 
+		//
 		//  P[i:i] = !(A[i] ^ B[i])
 		//  G[i:i] = !A[i] & B[i]
-		// 
+		//
 		// Also see: Harris, D. A taxonomy of parallel prefix networks. In IEEE ASILOMAR (2003).
 
 
@@ -918,7 +918,7 @@ namespace osuCrypto
 		signExtendResize(a1, sSize, zero, it);
 		signExtendResize(a2, sSize, zero, it);
 
-		if (sum[0] != -1)
+		if (sum[0] != static_cast<BetaWire>(-1))
 			P[0] = sum[0];
 
 		auto initGate0 = at == AdderType::Addition ? GateType::Xor : GateType::Nxor;
@@ -980,9 +980,9 @@ namespace osuCrypto
 		std::vector<Idx> stack;
 		auto add = [&](Idx idx)
 		{
-			assert(idx.pos != -1);
+			assert(idx.pos != static_cast<u64>(-1));
 
-			if (idx.lvl != -1)
+			if (idx.lvl != static_cast<u64>(-1))
 			{
 				auto& c0 = graph(idx.lvl, idx.pos);
 				if (c0.enqued == false)
@@ -997,7 +997,7 @@ namespace osuCrypto
 
 		for (u64 i = 1; i < sSize; ++i)
 		{
-			if (sum[i] != -1)
+			if (sum[i] != static_cast<BetaWire>(-1))
 			{
 				add({ lvls[i-1],i-1 });
 				//std::cout << "added* " << lvls[i] << ", " << i << std::endl;
@@ -1059,7 +1059,7 @@ namespace osuCrypto
 		cd.addGate(a1.mWires[0], a2.mWires[0], GateType::Xor, P[0]);
 		for (u64 i = 1; i < sSize; ++i)
 		{
-			if (sum[i] != -1)
+			if (sum[i] != static_cast<BetaWire>(-1))
 			{
 				// s[i] = P[i] ^ G[i-1]
 				if (a1[i] == zero && a2[i] == zero)
@@ -1071,7 +1071,7 @@ namespace osuCrypto
 			}
 		}
 
-		//std::cout << "~~~~~~~~~~~\n";	
+		//std::cout << "~~~~~~~~~~~\n";
 		//cd << "**~~~~~~~~~~~\n";
 
 	}
@@ -1159,7 +1159,7 @@ namespace osuCrypto
 		// borrow[i-1] -*
 		//
 		// We unify these two as:
-		// 
+		//
 		//  x[i] -------*--*-------------------*
 		//              |  |                   |
 		//              |  >= xor ---*         >= xor --- c[i]
@@ -1223,7 +1223,7 @@ namespace osuCrypto
 			else
 				cd.addGate(xi, yi, GateType::Xor, t0);
 
-			if (out[i] != -1)
+			if (out[i] != static_cast<BetaWire>(-1))
 				cd.addGate(t0, zi, GateType::Xor, out[i]);
 
 			if (i != out.size() - 1)
@@ -1817,14 +1817,14 @@ namespace osuCrypto
 			cir.addTempWireBundle(z);
 
 			// Jan 18 +  09
-			// Straight-line program for AES sbox 
+			// Straight-line program for AES sbox
 			// Joan Boyar and Rene Peralta
 
-			  // input is X0 + ..,X7  
+			  // input is X0 + ..,X7
 			  //output is S0 + ...,S7
 			  // arithmetic is over GF2
 
-			  // begin top linear transformation 
+			  // begin top linear transformation
 			cir.addGate(x[3], x[5], GateType::Xor, y[14]);//y14 = x3 + x5;
 			cir.addGate(x[0], x[6], GateType::Xor, y[13]);//y13 = x0 + x6;
 			cir.addGate(x[0], x[3], GateType::Xor, y[9]); //y9  = x0 + x3;
@@ -1848,7 +1848,7 @@ namespace osuCrypto
 			cir.addGate(t[00], y[11], GateType::Xor, y[16]); //y16 = t00 + y11;
 			cir.addGate(y[13], y[16], GateType::Xor, y[21]); //y21 = y13 + y16;
 			cir.addGate(x[00], y[16], GateType::Xor, y[18]); //y18 = x00 + y16;
-			// end top linear transformation 
+			// end top linear transformation
 			cir.addGate(y[12], y[15], GateType::And, t[02]); //t02 = y12 X y15;
 			cir.addGate(y[03], y[06], GateType::And, t[03]); //t03 = y03 X y06;
 			cir.addGate(t[03], t[02], GateType::Xor, t[04]); //t04 = t03 + t02;
@@ -1872,11 +1872,11 @@ namespace osuCrypto
 			cir.addGate(t[18], y[19], GateType::Xor, t[22]); //t22 = t18 + y19;
 			cir.addGate(t[19], y[21], GateType::Xor, t[23]); //t23 = t19 + y21;
 			cir.addGate(t[20], y[18], GateType::Xor, t[24]); //t24 = t20 + y18;
-			// this next piece of the circuit is 
+			// this next piece of the circuit is
 			// inversion in GF16, inputs are t21..24
 			// and outputs are T37,T33,T40,T29.
 			// Refer to paper for representation details
-			// (tower field construction, normal basis (W,W^2) for extension   
+			// (tower field construction, normal basis (W,W^2) for extension
 			// from GF2 to GF4 and (Z^2,Z^8) for extension from GF4 to GF16).
 			cir.addGate(t[21], t[22], GateType::Xor, t[25]);// t25 = t21 + t22;
 			cir.addGate(t[21], t[23], GateType::And, t[26]);// t26 = t21 X t23;
@@ -1918,7 +1918,7 @@ namespace osuCrypto
 			cir.addGate(t[42], y[9], GateType::And, z[15]);// z15 = t42 X y 9;
 			cir.addGate(t[45], y[14], GateType::And, z[16]);// z16 = t45 X y14;
 			cir.addGate(t[41], y[8], GateType::And, z[17]);// z17 = t41 X y 8;
-			// begin end linear transformation 
+			// begin end linear transformation
 			cir.addGate(z[15], z[16], GateType::Xor, t[46]);// t46 = z15 +    z16;
 			cir.addGate(z[10], z[11], GateType::Xor, t[47]);// t47 = z10 +    z11;
 			cir.addGate(z[05], z[13], GateType::Xor, t[48]);// t48 = z05 +    z13;

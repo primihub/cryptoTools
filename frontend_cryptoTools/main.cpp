@@ -3,7 +3,7 @@
 #include "Tutorials/Network.h"
 #include "cryptoTools/Network/Channel.h"
 #include "cryptoTools/Network/IOService.h"
-#include <cryptoTools/Common/Matrix.h>
+#include "cryptoTools/Common/Matrix.h"
 #include "cryptoTools/Common/CuckooIndex.h"
 #include "cryptoTools/Common/CLP.h"
 using namespace osuCrypto;
@@ -13,7 +13,7 @@ using namespace osuCrypto;
 //#include <cryptoTools/Common/Backtrace.h>
 
 #ifdef ENABLE_CIRCUITS
-#include <cryptoTools/Circuit/BetaLibrary.h>
+#include "cryptoTools/Circuit/BetaLibrary.h"
 //#include <cryptoTools/Crypto/Blake2/blake2.h>
 
 void print_aes_bristol()

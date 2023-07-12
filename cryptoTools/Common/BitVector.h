@@ -1,9 +1,9 @@
 #pragma once
-// This file and the associated implementation has been placed in the public domain, waiving all copyright. No restrictions are placed on its use. 
-#include <cryptoTools/Common/Defines.h>
-#include <cryptoTools/Common/BitIterator.h>
-#include <cryptoTools/Crypto/PRNG.h>
-#include <cryptoTools/Network/IoBuffer.h>
+// This file and the associated implementation has been placed in the public domain, waiving all copyright. No restrictions are placed on its use.
+#include "cryptoTools/Common/Defines.h"
+#include "cryptoTools/Common/BitIterator.h"
+#include "cryptoTools/Crypto/PRNG.h"
+#include "cryptoTools/Network/IoBuffer.h"
 
 namespace osuCrypto {
 
@@ -84,16 +84,16 @@ namespace osuCrypto {
         // Get a reference to a specific bit.
         BitReference operator[](const u64 idx) const;
 
-        // Xor two BitVectors together and return the result. Must have the same size. 
+        // Xor two BitVectors together and return the result. Must have the same size.
         BitVector operator^(const BitVector& B)const;
 
-        // AND two BitVectors together and return the result. Must have the same size. 
+        // AND two BitVectors together and return the result. Must have the same size.
         BitVector operator&(const BitVector& B)const;
 
-        // OR two BitVectors together and return the result. Must have the same size. 
+        // OR two BitVectors together and return the result. Must have the same size.
         BitVector operator|(const BitVector& B)const;
 
-        // Invert the bits of the BitVector and return the result. 
+        // Invert the bits of the BitVector and return the result.
         BitVector operator~()const;
 
         // Xor the rhs into this BitVector

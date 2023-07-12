@@ -1,4 +1,4 @@
-#include <cryptoTools/Crypto/AES.h>
+#include "cryptoTools/Crypto/AES.h"
 #include <array>
 #include <cstring>
 
@@ -31,7 +31,7 @@ namespace osuCrypto {
         template<>
         void AES<NI>::setKey(const block& userKey)
         {
-            
+
             mRoundKey[0] = userKey;
             mRoundKey[1] = keyGenHelper(mRoundKey[0], _mm_aeskeygenassist_si128(mRoundKey[0], 0x01));
             mRoundKey[2] = keyGenHelper(mRoundKey[1], _mm_aeskeygenassist_si128(mRoundKey[1], 0x02));
@@ -50,7 +50,7 @@ namespace osuCrypto {
 
 #if defined(OC_ENABLE_PORTABLE_AES)
         // The lookup-tables are marked const so they can be placed in read-only storage instead of RAM
-        // The numbers below can be computed dynamically trading ROM for RAM - 
+        // The numbers below can be computed dynamically trading ROM for RAM -
         // This can be useful in (embedded) bootloader applications, where ROM is often limited.
         static const u8 sbox[256] = {
             //0     1    2      3     4    5     6     7      8    9     A      B    C     D     E     F
@@ -105,7 +105,7 @@ namespace osuCrypto {
         template<>
         void AES<Portable>::setKey(const block& userKey)
         {
-            // This function produces 4(4+1) round keys. The round keys are used in each round to decrypt the states. 
+            // This function produces 4(4+1) round keys. The round keys are used in each round to decrypt the states.
             auto RoundKey = (u8*)mRoundKey.data();
             auto Key = (const u8*)&userKey;
 
@@ -147,7 +147,7 @@ namespace osuCrypto {
                         tempa[3] = u8tmp;
                     }
 
-                    // SubWord() is a function that takes a four-byte input word and 
+                    // SubWord() is a function that takes a four-byte input word and
                     // applies the S-box to each of the four bytes to produce an output word.
 
                     // Function Subword()
@@ -193,14 +193,14 @@ namespace osuCrypto {
             uint8_t temp;
             auto& state = stateView(state_);
 
-            // Rotate first row 1 columns to left  
+            // Rotate first row 1 columns to left
             temp = state[0][1];
             state[0][1] = state[1][1];
             state[1][1] = state[2][1];
             state[2][1] = state[3][1];
             state[3][1] = temp;
 
-            // Rotate second row 2 columns to left  
+            // Rotate second row 2 columns to left
             temp = state[0][2];
             state[0][2] = state[2][2];
             state[2][2] = temp;
@@ -838,14 +838,14 @@ namespace osuCrypto {
             uint8_t temp;
             auto& state = stateView(state_);
 
-            // Rotate first row 1 columns to right  
+            // Rotate first row 1 columns to right
             temp = state[3][1];
             state[3][1] = state[2][1];
             state[2][1] = state[1][1];
             state[1][1] = state[0][1];
             state[0][1] = temp;
 
-            // Rotate second row 2 columns to right 
+            // Rotate second row 2 columns to right
             temp = state[0][2];
             state[0][2] = state[2][2];
             state[2][2] = temp;

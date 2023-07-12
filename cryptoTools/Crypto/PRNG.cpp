@@ -1,5 +1,5 @@
-#include <cryptoTools/Crypto/PRNG.h>
-#include <cryptoTools/Common/Log.h>
+#include "cryptoTools/Crypto/PRNG.h"
+#include "cryptoTools/Common/Log.h"
 #include <algorithm>
 #include <cstring>
 
@@ -26,7 +26,7 @@ namespace osuCrypto {
         s.mBufferByteCapacity = 0;
     }
 
-    void PRNG::operator=(PRNG&&s) 
+    void PRNG::operator=(PRNG&&s)
     {
         mBuffer = (std::move(s.mBuffer));
         mAes = (std::move(s.mAes));
@@ -74,7 +74,7 @@ namespace osuCrypto {
                 {
                     span<block> b((block*)destu8, lengthu8 / sizeof(block));
                     mAes.ecbEncCounterMode(mBlockIdx, b.size(), b.data());
-                    mBlockIdx += b.size(); 
+                    mBlockIdx += b.size();
 
                     step = b.size() * sizeof(block);
 

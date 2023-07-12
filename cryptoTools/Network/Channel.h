@@ -3,13 +3,13 @@
 #include "cryptoTools/Common/config.h"
 #ifdef ENABLE_BOOST
 
-#include <cryptoTools/Common/Defines.h>
-#include <cryptoTools/Network/IoBuffer.h>
-#include <cryptoTools/Network/SocketAdapter.h>
-#include <cryptoTools/Network/util.h>
+#include "cryptoTools/Common/Defines.h"
+#include "cryptoTools/Network/IoBuffer.h"
+#include "cryptoTools/Network/SocketAdapter.h"
+#include "cryptoTools/Network/util.h"
 
 #ifdef ENABLE_NET_LOG
-#include <cryptoTools/Common/Log.h>
+#include "cryptoTools/Common/Log.h"
 #endif
 #include <future>
 #include <cassert>
@@ -57,19 +57,19 @@ namespace osuCrypto {
         //						   Sending interface								//
         //////////////////////////////////////////////////////////////////////////////
 
-        // Sends length number of T pointed to by src over the network. The type T 
+        // Sends length number of T pointed to by src over the network. The type T
         // must be POD. Returns once all the data has been sent.
         template<typename T>
         typename std::enable_if<std::is_pod<T>::value, void>::type
             send(const T* src, u64 length);
 
-        // Sends the data in buf over the network. The type Container  must meet the 
+        // Sends the data in buf over the network. The type Container  must meet the
         // requirements defined in IoBuffer.h. Returns once all the data has been sent.
         template <class T>
         typename std::enable_if<std::is_pod<T>::value, void>::type
             send(const T& buf);
 
-        // Sends the data in buf over the network. The type Container  must meet the 
+        // Sends the data in buf over the network. The type Container  must meet the
         // requirements defined in IoBuffer.h. Returns once all the data has been sent.
         template <class Container>
         typename std::enable_if<is_container<Container>::value, void>::type
@@ -77,26 +77,26 @@ namespace osuCrypto {
 
 
         // Sends the data in buf over the network. The type T must be POD.
-        // Returns before the data has been sent. The life time of the data must be 
+        // Returns before the data has been sent. The life time of the data must be
         // managed externally to ensure it lives longer than the async operations.
         template<typename T>
         typename std::enable_if<std::is_pod<T>::value, void>::type
             asyncSend(const T* data, u64 length);
 
-        // Sends the data in buf over the network. The type Container  must meet the 
-        // requirements defined in IoBuffer.h. Returns before the data has been sent. 
-        // The life time of the data must be managed externally to ensure it lives 
-        // longer than the async operations.  callback is a function that is called 
+        // Sends the data in buf over the network. The type Container  must meet the
+        // requirements defined in IoBuffer.h. Returns before the data has been sent.
+        // The life time of the data must be managed externally to ensure it lives
+        // longer than the async operations.  callback is a function that is called
         // from another thread once the send operation has succeeded.
         template<typename Container>
         typename std::enable_if<is_container<Container>::value, void>::type
             asyncSend(Container&& data, std::function<void()> callback);
 
 
-        // Sends the data in buf over the network. The type Container  must meet the 
-        // requirements defined in IoBuffer.h. Returns before the data has been sent. 
-        // The life time of the data must be managed externally to ensure it lives 
-        // longer than the async operations.  callback is a function that is called 
+        // Sends the data in buf over the network. The type Container  must meet the
+        // requirements defined in IoBuffer.h. Returns before the data has been sent.
+        // The life time of the data must be managed externally to ensure it lives
+        // longer than the async operations.  callback is a function that is called
         // from another thread once the send operation has completed.
         template<typename Container>
         typename std::enable_if<is_container<Container>::value, void>::type
@@ -104,61 +104,61 @@ namespace osuCrypto {
 
 
         // Sends the data in buf over the network. The type T must be POD.
-        // Returns before the data has been sent. The life time of the data must be 
+        // Returns before the data has been sent. The life time of the data must be
         // managed externally to ensure it lives longer than the async operations.
         template<typename T>
         typename std::enable_if<std::is_pod<T>::value, void>::type
             asyncSend(const T& data);
 
         // Sends the data in buf over the network. The type T must be POD.
-        // Returns before the data has been sent. The life time of the data must be 
+        // Returns before the data has been sent. The life time of the data must be
         // managed externally to ensure it lives longer than the async operations.
         template<typename Container>
         typename std::enable_if<is_container<Container>::value, void>::type
             asyncSend(const Container& data);
 
-        // Sends the data in buf over the network. The type Container  must meet the 
-        // requirements defined in IoBuffer.h. Returns before the data has been sent. 
+        // Sends the data in buf over the network. The type Container  must meet the
+        // requirements defined in IoBuffer.h. Returns before the data has been sent.
         template <class Container>
         typename std::enable_if<is_container<Container>::value, void>::type
             asyncSend(Container&& c);
 
-        // Sends the data in buf over the network. The type Container  must meet the 
-        // requirements defined in IoBuffer.h. Returns before the data has been sent. 
+        // Sends the data in buf over the network. The type Container  must meet the
+        // requirements defined in IoBuffer.h. Returns before the data has been sent.
         template <class Container>
         typename std::enable_if<is_container<Container>::value, void>::type
             asyncSend(std::unique_ptr<Container> buffer);
 
-        // Sends the data in buf over the network. The type Container  must meet the 
-        // requirements defined in IoBuffer.h. Returns before the data has been sent. 
+        // Sends the data in buf over the network. The type Container  must meet the
+        // requirements defined in IoBuffer.h. Returns before the data has been sent.
         template <class Container>
         typename std::enable_if<is_container<Container>::value, void>::type
             asyncSend(std::shared_ptr<Container> buffer);
 
 
         // Sends the data in buf over the network. The type T must be POD.
-        // Returns before the data has been sent. The life time of the data must be 
+        // Returns before the data has been sent. The life time of the data must be
         // managed externally to ensure it lives longer than the async operations.
         template<typename T>
         typename std::enable_if<std::is_pod<T>::value, std::future<void>>::type
             asyncSendFuture(const T* data, u64 length);
 
 
-        // Performs a data copy and then sends the data in buf over the network. 
-        //  The type T must be POD. Returns before the data has been sent. 
+        // Performs a data copy and then sends the data in buf over the network.
+        //  The type T must be POD. Returns before the data has been sent.
         template<typename T>
         typename std::enable_if<std::is_pod<T>::value, void>::type
             asyncSendCopy(const T& buff);
 
-        // Performs a data copy and then sends the data in buf over the network. 
-        //  The type T must be POD. Returns before the data has been sent. 
+        // Performs a data copy and then sends the data in buf over the network.
+        //  The type T must be POD. Returns before the data has been sent.
         template<typename T>
         typename std::enable_if<std::is_pod<T>::value, void>::type
             asyncSendCopy(const T* bufferPtr, u64 length);
 
-        // Performs a data copy and then sends the data in buf over the network. 
-        // The type Container must meet the requirements defined in IoBuffer.h. 
-        // Returns before the data has been sent. 
+        // Performs a data copy and then sends the data in buf over the network.
+        // The type Container must meet the requirements defined in IoBuffer.h.
+        // Returns before the data has been sent.
         template <typename  Container>
         typename std::enable_if<is_container<Container>::value, void>::type
             asyncSendCopy(const Container& buf);
@@ -179,7 +179,7 @@ namespace osuCrypto {
             asyncRecv(c).get();
         }
 
-        // Receive data over the network. The container c must be the correct size to 
+        // Receive data over the network. The container c must be the correct size to
         // fit the data. The function returns once all the data has been received.
         template <class Container>
         typename std::enable_if<
@@ -190,41 +190,41 @@ namespace osuCrypto {
             asyncRecv(c).get();
         }
 
-        // Receive data over the network. The function returns once all the data 
+        // Receive data over the network. The function returns once all the data
         // has been received.
         template<typename T>
         typename std::enable_if<std::is_pod<T>::value, void>::type
             recv(T* dest, u64 length);
 
-        // Receive data over the network. The function returns once all the data 
+        // Receive data over the network. The function returns once all the data
         // has been received.
         template<typename T>
         typename std::enable_if<std::is_pod<T>::value, void>::type
             recv(T& dest) { recv(&dest, 1); }
 
         // Receive data over the network asynchronously. The function returns right away,
-        // before the data has been received. When all the data has benn received the 
+        // before the data has been received. When all the data has benn received the
         // future is set.
         template<typename T>
         typename std::enable_if<std::is_pod<T>::value, std::future<void>>::type
             asyncRecv(T* dest, u64 length);
 
         // Receive data over the network asynchronously. The function returns right away,
-        // before the data has been received. When all the data has benn received the 
+        // before the data has been received. When all the data has benn received the
         // future is set and the callback fn is called.
         template<typename T>
         typename std::enable_if<std::is_pod<T>::value, std::future<void>>::type
             asyncRecv(T* dest, u64 length, std::function<void()> fn);
 
         // Receive data over the network asynchronously. The function returns right away,
-        // before the data has been received. When all the data has benn received the 
+        // before the data has been received. When all the data has benn received the
         // future is set.
         template<typename T>
         typename std::enable_if<std::is_pod<T>::value, std::future<void>>::type
             asyncRecv(T& dest) { return asyncRecv(&dest, 1); }
 
         // Receive data over the network asynchronously. The function returns right away,
-        // before the data has been received. When all the data has benn received the 
+        // before the data has been received. When all the data has benn received the
         // future is set. The container must be the correct size to fit the data received.
         template <class Container>
         typename std::enable_if<
@@ -233,7 +233,7 @@ namespace osuCrypto {
             asyncRecv(Container & c);
 
         // Receive data over the network asynchronously. The function returns right away,
-        // before the data has been received. When all the data has benn received the 
+        // before the data has been received. When all the data has benn received the
         // future is set. The container is resized to fit the data.
         template <class Container>
         typename std::enable_if<
@@ -242,8 +242,8 @@ namespace osuCrypto {
             asyncRecv(Container & c);
 
         // Receive data over the network asynchronously. The function returns right away,
-        // before the data has been received. When all the data has benn received the 
-        // future is set and the callback fn is called. The container must be the correct 
+        // before the data has been received. When all the data has benn received the
+        // future is set and the callback fn is called. The container must be the correct
         // size to fit the data received.
         template <class Container>
         typename std::enable_if<
@@ -252,8 +252,8 @@ namespace osuCrypto {
             asyncRecv(Container & c, std::function<void()> fn);
 
         // Receive data over the network asynchronously. The function returns right away,
-        // before the data has been received. When all the data has benn received the 
-        // future is set and the callback fn is called. The container must be the correct 
+        // before the data has been received. When all the data has benn received the
+        // future is set and the callback fn is called. The container must be the correct
         // size to fit the data received.
         template <class Container>
         typename std::enable_if<
@@ -262,8 +262,8 @@ namespace osuCrypto {
             asyncRecv(Container & c, std::function<void(const error_code&)> fn);
 
         // Receive data over the network asynchronously. The function returns right away,
-        // before the data has been received. When all the data has benn received the 
-        // future is set and the callback fn is called. The container must be the correct 
+        // before the data has been received. When all the data has benn received the
+        // future is set and the callback fn is called. The container must be the correct
         // size to fit the data received.
         template <class Container>
         typename std::enable_if<
@@ -308,7 +308,7 @@ namespace osuCrypto {
         bool waitForConnection(std::chrono::milliseconds timeout);
 
         // A blocking call that waits until the channel is open in that it can send/receive data
-        // Returns if the connection has been made. 
+        // Returns if the connection has been made.
         void waitForConnection();
 
         void onConnect(completion_handle handle);
@@ -450,14 +450,14 @@ namespace osuCrypto {
         void asyncPerform(ChannelBase*, io_completion_handle&& completionHandle) override {
             mBase->setHandle(std::forward<io_completion_handle>(completionHandle), true);
         }
-        void asyncCancelPending(ChannelBase* base, const error_code& ec) override { 
-            mBase->cancelPending(true); 
+        void asyncCancelPending(ChannelBase* base, const error_code& ec) override {
+            mBase->cancelPending(true);
         }
 
         void asyncCancel(ChannelBase* base, const error_code& ec, io_completion_handle&& completionHandle) override
-        { 
+        {
             mBase->setHandle(std::forward<io_completion_handle>(completionHandle), true);
-            mBase->cancelPending(true); 
+            mBase->cancelPending(true);
         }
 
         std::string toString() const override {
@@ -481,7 +481,7 @@ namespace osuCrypto {
         void asyncCancelPending(ChannelBase* base, const error_code& ec) override { mBase->cancelPending(false); }
 
         void asyncCancel(ChannelBase* base, const error_code& ec, io_completion_handle&& completionHandle) override
-        { 
+        {
             mBase->setHandle(std::forward<io_completion_handle>(completionHandle), false);
             mBase->cancelPending(false);
         }
@@ -496,14 +496,14 @@ namespace osuCrypto {
     };
 
 
-    // The Channel base class the actually holds a socket. 
+    // The Channel base class the actually holds a socket.
     class ChannelBase : public std::enable_shared_from_this<ChannelBase>
     {
     public:
         ChannelBase(Session& endpoint, std::string localName, std::string remoteName);
         ChannelBase(IOService& ios, SocketInterface* sock);
         ~ChannelBase();
-        
+
         IOService& mIos;
         Work mWork;
         std::unique_ptr<StartSocketOp> mStartOp;
@@ -615,7 +615,7 @@ namespace osuCrypto {
         auto size = c.size() * sizeof(typename Container::value_type);
 
         auto op = make_SBO_ptr<
-            details::SendOperation, 
+            details::SendOperation,
             details::FixedSendBuff>(buff, size);
 
         mBase->sendEnque(std::move(op));
@@ -628,7 +628,7 @@ namespace osuCrypto {
         assert(channelBuffSize(c) - 1 < u32(-2));
 
         auto op = make_SBO_ptr<
-            details::SendOperation, 
+            details::SendOperation,
             details::MoveSendBuff<Container>>
             (std::move(c));
 
@@ -646,7 +646,7 @@ namespace osuCrypto {
 
         std::future<void> future;
         auto op = make_SBO_ptr<
-            details::RecvOperation, 
+            details::RecvOperation,
             details::RefRecvBuff<Container>>
             (c, future);
 
@@ -663,7 +663,7 @@ namespace osuCrypto {
     {
         std::future<void> future;
         auto op = make_SBO_ptr<
-            details::RecvOperation, 
+            details::RecvOperation,
             details::ResizableRefRecvBuff<Container>>
             (c, future);
 
@@ -763,7 +763,7 @@ namespace osuCrypto {
 
         std::future<void> future;
         auto op = make_SBO_ptr<
-            details::SendOperation, 
+            details::SendOperation,
             details::WithPromise<details::FixedSendBuff>>
             (future, buff, size);
 
@@ -792,7 +792,7 @@ namespace osuCrypto {
 
         std::future<void> future;
         auto op = make_SBO_ptr<
-            details::RecvOperation, 
+            details::RecvOperation,
             details::FixedRecvBuff>
             (buff, size, future);
 
@@ -812,7 +812,7 @@ namespace osuCrypto {
 
         std::future<void> future;
         auto op = make_SBO_ptr<
-            details::RecvOperation, 
+            details::RecvOperation,
             details::WithCallback<details::FixedRecvBuff>>
             (std::move(fn), buff, size, future);
 
@@ -832,7 +832,7 @@ namespace osuCrypto {
         assert(size - 1 < u32(-2));
 
         auto op = make_SBO_ptr<
-            details::SendOperation, 
+            details::SendOperation,
             details::FixedSendBuff>
             (buff, size);
 
